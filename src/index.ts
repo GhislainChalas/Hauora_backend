@@ -1,21 +1,10 @@
 import express from "express";
 import cors from "cors";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import UserController from "./controllers/user.controller";
+import { client } from "./core/const";
 
-const uri =
-  "mongodb+srv://admin:dXord4nuDcfRQsy1@cluster-test.97c9j8y.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
 const port = 3000;
-
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
-
-const database = client.db("test");
 
 app.use(cors());
 
@@ -23,13 +12,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/users", async (req, res) => {
-  await client.connect();
-  const collection = database.collection("users");
-  const result = await collection.find({}).toArray();
-  res.send(result);
-  await client.close();
-});
+app.use("/users", UserController);
 
 app.listen(port, () => {
   run().catch(console.dir);
