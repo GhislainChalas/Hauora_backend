@@ -6,11 +6,26 @@ const collection = database.collection("consultations");
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
+router.get("/:patientId", async (req, res) => {
+  await client.connect();
+  const result = await collection
+    .find({ patientId: req.params.patientId })
+    .sort({ date: -1 })
+    .toArray();
+  if (result) {
+    res.status(200).send(result);
+  } else {
+    res.status(404).send("Aucune consultation disponible");
+  }
+  await client.close();
+});
+
 router.get("/:patientId/last", async (req, res) => {
   await client.connect();
   const result = await collection
     .find({ patientId: req.params.patientId })
     .sort({ date: -1 })
+    .limit(5)
     .toArray();
   if (result) {
     res.status(200).send(result);
