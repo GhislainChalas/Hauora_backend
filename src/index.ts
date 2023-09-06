@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import UserController from "./controllers/user.controller";
 import PatientController from "./controllers/patient.controller";
+import AdmissionController from "./controllers/admission.controller";
 import { client } from "./core/const";
 
 const app = express();
@@ -15,6 +16,7 @@ app.get("/", (req, res) => {
 
 app.use("/users", UserController);
 app.use("/patients", PatientController);
+app.use("/admissions", AdmissionController);
 
 app.listen(port, () => {
   run().catch(console.dir);

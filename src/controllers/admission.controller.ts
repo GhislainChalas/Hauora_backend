@@ -1,20 +1,21 @@
-import { ObjectId } from "mongodb";
 import express from "express";
 import { client, database } from "../core/const";
 import bodyParser from "body-parser";
 
-const collection = database.collection("patient");
+const collection = database.collection("admissions");
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
-router.get("/:id", async (req, res) => {
+router.get("/last/:patientId", async (req, res) => {
   await client.connect();
-  const result = await collection.findOne({ _id: new ObjectId(req.params.id) });
-  console.log(result);
+  const result = await collection
+    .find({ patientId: req.params.patientId })
+    .sort({ date: -1 })
+    .toArray();
   if (result) {
     res.status(200).send(result);
   } else {
-    res.status(404).send("Aucun patient identifié");
+    res.status(404).send("Aucune admission disponible");
   }
   await client.close();
 });
