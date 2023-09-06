@@ -2,7 +2,7 @@ import express from "express";
 import { client, database } from "../core/const";
 import bodyParser from "body-parser";
 
-const collection = database.collection("admissions");
+const collection = database.collection("consultations");
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
@@ -15,7 +15,7 @@ router.get("/:patientId/last", async (req, res) => {
   if (result) {
     res.status(200).send(result);
   } else {
-    res.status(404).send("Aucune admission disponible");
+    res.status(404).send("Aucune consultation disponible");
   }
   await client.close();
 });
@@ -27,6 +27,8 @@ router.post("/create", jsonParser, async (req, res) => {
     res.status(200).send(result);
   } catch (err) {
     res.status(500).send(err);
+  } finally {
+    await client.close();
   }
 });
 
