@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
-import UserController from "./controllers/user.controller";
-import PatientController from "./controllers/patient.controller";
 import AdmissionController from "./controllers/admission.controller";
 import ConsultationController from "./controllers/consultation.controller";
+import OrganizationController from "./controllers/organization.controller";
+import PatientController from "./controllers/patient.controller";
+import UserController from "./controllers/user.controller";
 import { client } from "./core/const";
 
 const app = express();
@@ -15,10 +16,11 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/users", UserController);
-app.use("/patients", PatientController);
 app.use("/admissions", AdmissionController);
 app.use("/consultations", ConsultationController);
+app.use("/organizations", OrganizationController);
+app.use("/patients", PatientController);
+app.use("/users", UserController);
 
 app.listen(port, () => {
   run().catch(console.dir);
